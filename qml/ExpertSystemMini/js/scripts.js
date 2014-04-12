@@ -1,5 +1,5 @@
 .pragma library
 
-function func() {
+function parseMkbFile(source) {
 
 }

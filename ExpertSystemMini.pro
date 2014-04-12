@@ -7,7 +7,8 @@ DEPLOYMENTFOLDERS = folder_01
 QML_IMPORT_PATH =
 
 # The .cpp file which was generated for your project. Feel free to hack it.
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    fileio.cpp
 
 # Installation path
 # target.path =
@@ -15,3 +16,15 @@ SOURCES += main.cpp
 # Please do not modify the following two lines. Required for deployment.
 include(qtquick2applicationviewer/qtquick2applicationviewer.pri)
 qtcAddDeployment()
+
+OTHER_FILES += \
+    qml/ExpertSystemMini/modules/CustomMenuBar.qml \
+    qml/ExpertSystemMini/modules/ItemsNProcess.qml \
+    qml/ExpertSystemMini/modules/Questions.qml \
+    qml/ExpertSystemMini/modules/QuestionTable.qml \
+    qml/ExpertSystemMini/js/scripts.js
+
+RESOURCES +=
+
+HEADERS += \
+    fileio.h
