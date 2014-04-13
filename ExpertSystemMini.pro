@@ -8,7 +8,8 @@ QML_IMPORT_PATH =
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
-    fileio.cpp
+    fileio.cpp \
+    item.cpp
 
 # Installation path
 # target.path =
@@ -27,4 +28,5 @@ OTHER_FILES += \
 RESOURCES +=
 
 HEADERS += \
-    fileio.h
+    fileio.h \
+    item.h

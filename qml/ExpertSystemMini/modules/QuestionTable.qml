@@ -8,6 +8,10 @@ Item {
     Layout.fillHeight: true
     anchors.margins: 5
 
+    function setTableModel(model) {
+        someTableView.model = model;
+    }
+
     TableView {
         id: someTableView
         //model: dummyModel

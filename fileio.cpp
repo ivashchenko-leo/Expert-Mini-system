@@ -1,7 +1,9 @@
 #include "fileio.h"
 
 FileIO::FileIO(QObject *parent) :
-    QObject(parent)
+    QObject(parent),
+    keyWordForItems("Итемы:"),
+    keyWordForQuestions("Вопросы:")
 {
 }
 
@@ -53,18 +55,56 @@ bool FileIO::write(const QString& data)
 
     return true;
 }
+void FileIO::setQuestions(const QString& questions)
+{
+    QString copy = questions;
+    QString str = keyWordForQuestions + "\n";
+
+    if (copy.contains(str)) {
+        copy.remove(str);
+    }
+
+    this->setQuestions(copy.split("\n"));
+}
+
+void FileIO::setQuestions(const QStringList& questions)
+{
+    pQuestions = questions;
+}
+
+void FileIO::setItems(const QString& items)
+{
+    QString copy = items;
+    QString str = keyWordForItems + "\n";
+
+    if (copy.contains(str)) {
+        copy.remove(str);
+    }
+
+    this->setItems(copy.split("\n"));
+}
+
+void FileIO::setItems(const QStringList& items)
+{
+    QStringList itemsCopy = items;
+
+    for (int i = 0; i < itemsCopy.size(); i++) {
+        QString itemByString = itemsCopy.at(i);
+        Item* item = new Item(itemByString.remove(" "));
+        pItems.append(item);
+    }
+}
 
 void FileIO::setProperties()
 {
     this->setDescription(this->parse("^.*\n\n", true));
-    qDebug() << pDescription;
+    this->setQuestions(this->parse(keyWordForQuestions + ".*\n\n", true));
+    this->setItems(this->parse(keyWordForItems + "\n.*\n", false));
 }
 
 QString FileIO::parse(const QString regexString, const bool isGreedy)
 {
     QRegExp regex(regexString);
-    //QRegExp regex("\n\n.*\n\n");
-    //QRegExp regex("Итемы:\n.*\n");
     regex.setMinimal(isGreedy);
 
     int pos = regex.indexIn(this->read());

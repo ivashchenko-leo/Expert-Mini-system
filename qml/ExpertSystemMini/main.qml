@@ -55,6 +55,7 @@ ApplicationWindow {
         onAccepted: {
             fileHandler.source = fileUrl;
             fileHandler.setProperties();
+            informationTA.text = fileHandler.description;
         }
     }
     Action {
