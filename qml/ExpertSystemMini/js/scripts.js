@@ -1,5 +1,5 @@
 .pragma library
 
-function parseMkbFile(source) {
+function createItemsModel() {
 
 }

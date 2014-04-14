@@ -5,7 +5,7 @@ import QtQuick.Dialogs 1.1
 import QtQuick.Layouts 1.1
 import "modules"
 import "js/scripts.js" as JavaScript
-import FileIO 1.0
+import DataManager 1.0
 
 ApplicationWindow {
     id: appWindow
@@ -32,6 +32,7 @@ ApplicationWindow {
         }
 
         ItemsNProcess {
+                id: itemsNProcessObject
                 implicitHeight: (parent.height - informationTA.height) / 2
                 Layout.fillWidth: true
                 anchors.top: informationTA.bottom
@@ -44,18 +45,20 @@ ApplicationWindow {
         }
     }
 
-    FileIO {
+    DataManager {
         id: fileHandler
-        onError: console.log(msg)
     }
 
     FileDialog {
         id: fileDialog
         nameFilters: [ "Mini knowledge base (*.mkb)" ]
         onAccepted: {
-            fileHandler.source = fileUrl;
-            fileHandler.setProperties();
-            informationTA.text = fileHandler.description;
+            fileHandler.setSource(fileUrl);
+
+            getItemsModel();
+            itemsNProcessObject.setItemsModel(itemsModel);
+
+            informationTA.text = fileHandler.getDescription();
         }
     }
     Action {
@@ -113,5 +116,20 @@ ApplicationWindow {
         text: "&Cancel Selected Answers"
         shortcut: "F9"
         //onTriggered: aboutDialog.open()
+    }
+
+    ListModel {
+        id: itemsModel
+    }
+
+    function getItemsModel() {
+        var i = 0;
+
+        itemsModel.clear();
+
+        for (; i < fileHandler.getItemsNumber(); i++) {
+            itemsModel.append({"Possibility" : fileHandler.getItemPossibility(i),
+                                  "Item" : fileHandler.getItemName(i)});
+        }
     }
 }

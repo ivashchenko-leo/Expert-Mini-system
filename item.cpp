@@ -6,8 +6,8 @@ Item::Item(QObject *parent) :
 {
 }
 
-Item::Item(QString item, const QString& separator) :
-    QObject()
+Item::Item(QString item, const QString& separator, QObject *parent) :
+    QObject(parent)
 {
     QStringList itemByList = item.split(separator);
 
@@ -15,15 +15,20 @@ Item::Item(QString item, const QString& separator) :
     pPossibility = itemByList.at(1).toDouble();
 
     for (int i = 2; i < itemByList.size(); i += 3) {
-        pAnswers.append(itemByList.at(i + 1).toInt());
-        //pSomeShit.append(itemByList.at(i + 2).toDouble());
+        pAnswersIsTrue.append(itemByList.at(i + 1).toDouble());
+        pNotAnswersButTrue.append(itemByList.at(i + 2).toDouble());
     }
 
-    questionsCounter = pAnswers.size();
+    questionsCounter = pAnswersIsTrue.size();
 }
 
-void Item::setAnswers(const QVector<int>& answers)
+void Item::setNotAnswersPossibility(const QVector<double> answers)
 {
-    questionsCounter = answers.count();
-    pAnswers = answers;
+    pNotAnswersButTrue = answers;
+}
+
+void Item::setAnswersPossibility(const QVector<double>& answers)
+{
+    //questionsCounter = answers.count();
+    pAnswersIsTrue = answers;
 }

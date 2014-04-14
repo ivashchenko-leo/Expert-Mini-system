@@ -6,6 +6,12 @@ import QtQuick.Layouts 1.1
 Item {
     id: itemsNProcess
 
+    function setItemsModel(model) {
+        itemsTable.model = model;
+    }
+
+
+
     RowLayout {
         anchors.fill: parent
 
@@ -16,6 +22,7 @@ Item {
             anchors.left: parent.left
 
             TableView {
+                id: itemsTable
                 //model: dummyModel
                 anchors.top: parent.top
                 anchors.fill: parent

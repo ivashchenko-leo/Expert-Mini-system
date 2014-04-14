@@ -33,6 +33,8 @@ public:
     QString getDescription() { return pDescription; }
     QStringList getQuestions() { return pQuestions; }
     QList<Item* > getItems() { return pItems; }
+    int getQuestionsNumber() { return pQuestions.count(); }
+    int getItemsNumber() { return pItems.count(); }
 
 public slots:
     void setSource(const QString& source);

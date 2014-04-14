@@ -9,22 +9,24 @@ class Item : public QObject
     Q_OBJECT
 public:
     explicit Item(QObject *parent = 0);
-    Item(QString item, const QString& separator = ",");
+    Item(QString item, const QString& separator = ",", QObject *parent = 0);
     void setName(const QString& name) { pName = name; }
     void setPossibility(const int& possibility) { pPossibility = possibility; }
-    void setAnswers(const QVector<int>& answers);
-    //void setSomeShit(const QVector<double> someShit) { pSomeShit = someShit; }
+    void setAnswersPossibility(const QVector<double> &answers);
+    void setNotAnswersPossibility(const QVector<double> answers);
 
     const QString& getName() { return pName; }
     const double& getPossibility() { return pPossibility; }
-    const QVector<int>& getAnswers() { return pAnswers; }
+    const QVector<double>& getAnswersPossibility() { return pAnswersIsTrue; }
+    const QVector<double>& getNotAnswersPossibility() { return pNotAnswersButTrue; }
+    const int& getQuestionsCounter() { return questionsCounter; }
 signals:
 
 private:
     QString pName;
     double pPossibility;
-    QVector<int> pAnswers;
-    QVector<double> pSomeShit;
+    QVector<double> pAnswersIsTrue;
+    QVector<double> pNotAnswersButTrue;
     int questionsCounter;
 };
 

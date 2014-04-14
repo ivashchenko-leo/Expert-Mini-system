@@ -88,9 +88,13 @@ void FileIO::setItems(const QStringList& items)
 {
     QStringList itemsCopy = items;
 
+    if (!pItems.isEmpty()) {
+        pItems.clear();
+    }
+
     for (int i = 0; i < itemsCopy.size(); i++) {
         QString itemByString = itemsCopy.at(i);
-        Item* item = new Item(itemByString.remove(" "));
+        Item* item = new Item(itemByString.remove(" "), ",", this);
         pItems.append(item);
     }
 }
