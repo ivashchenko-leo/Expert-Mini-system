@@ -10,7 +10,8 @@ QML_IMPORT_PATH =
 SOURCES += main.cpp \
     fileio.cpp \
     item.cpp \
-    datamanager.cpp
+    expertsystem.cpp \
+    modelstate.cpp
 
 # Installation path
 # target.path =
@@ -31,4 +32,5 @@ RESOURCES +=
 HEADERS += \
     fileio.h \
     item.h \
-    datamanager.h
+    expertsystem.h \
+    modelstate.h

@@ -7,6 +7,14 @@ Item {
     id: questionsItem
     property int imageWidth: 40
 
+    function setActiveQuestionsModel(model) {
+        activeQuestions.setTableModel(model);
+    }
+
+    function setInactiveQuestionsModel(model) {
+        inactiveQuestions.setTableModel(model);
+    }
+
     RowLayout {
         id: questionsManager
         anchors.fill: parent
@@ -85,7 +93,10 @@ Item {
                         }
                         implicitWidth: imageWidth
                         implicitHeight: implicitWidth
-                        //onClicked:
+                        onClicked: //fromActiveToInactive(activeQuestions.)
+                        {
+                            activeQuestions.getFocusItemIndex();
+                        }
                     }
                 }
             }

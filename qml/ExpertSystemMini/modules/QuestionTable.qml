@@ -12,6 +12,10 @@ Item {
         someTableView.model = model;
     }
 
+    function getFocusItemIndex() {
+        console.log(someTableView.currentRow);
+    }
+
     TableView {
         id: someTableView
         //model: dummyModel
@@ -20,11 +24,6 @@ Item {
         //onSortIndicatorColumnChanged: model.sort(sortIndicatorColumn, sortIndicatorOrder)
         //onSortIndicatorOrderChanged: model.sort(sortIndicatorColumn, sortIndicatorOrder)
 
-        TableViewColumn {
-            role: "Significance"
-            title: "Significance"
-            width: someTableView.width * 0.31
-        }
         TableViewColumn {
             role: "Question"
             title: "Question"

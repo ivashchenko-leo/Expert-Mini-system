@@ -14,12 +14,12 @@ int main(int argc, char *argv[])
 */
 #include <QtGui/QGuiApplication>
 #include <QtQml>
-#include "datamanager.h"
+#include "expertsystem.h"
 
 int main(int argc, char *argv[]) {
     QGuiApplication app(argc, argv);
 
-    qmlRegisterType<DataManager, 1>("DataManager", 1, 0, "DataManager");
+    qmlRegisterType<ExpertSystem, 1>("ExpertSystem", 1, 0, "ExpertSystem");
 
     QQmlApplicationEngine engine;
     engine.load(QUrl("qml/ExpertSystemMini/main.qml"));

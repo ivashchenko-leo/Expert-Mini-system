@@ -4,42 +4,39 @@ import QtQuick.Layouts 1.0
 import QtQuick.Dialogs 1.1
 
 MenuBar {
-              id: customMenuBar
+            id: customMenuBar
 
-              Menu {
-                  title: "&File"
-                  MenuItem {
-                      action: openAction
-                  }
-                  MenuItem {
-                      text: "Close"
-                      shortcut: StandardKey.Quit
-                      onTriggered: Qt.quit()
-                  }
-              }
-              Menu {
-                  title: "&Settings"
-                  MenuItem {
-                      action: changeSettings
-                  }
-                  MenuSeparator {}
-                  MenuItem {
-                      action: resetToDefault
-                  }
-              }
-              Menu {
-                  title: "&Consultation"
-                  MenuItem {
-                      action: startConsultation
-                  }
-                  MenuItem {
-                      action: cancelSelectedAnswers
-                  }
-              }
-              Menu {
-                  title: "&Help"
-                  MenuItem {
-                      action: aboutAction
-                  }
-              }
-          }
+            function toggleActionInConsultation(){
+                consultationButton.checked = !consultationButton.checked;
+                consultationButton.action = stopConsultation;
+            }
+
+            Menu {
+                title: "&File"
+                MenuItem {
+                    action: openAction
+                }
+                MenuItem {
+                    text: "Close"
+                    shortcut: StandardKey.Quit
+                    onTriggered: Qt.quit()
+                }
+            }
+            Menu {
+                title: "&Consultation"
+                MenuItem {
+                    id: consultationButton
+                    checked: false
+                    action: startConsultation
+                }
+                MenuItem {
+                    action: cancelLastAnswer
+                }
+            }
+            Menu {
+                title: "&Help"
+                MenuItem {
+                    action: aboutAction
+                }
+            }
+        }

@@ -10,7 +10,13 @@ Item {
         itemsTable.model = model;
     }
 
+    property string stateOfInputP: "P";
+    property string stateOfInputCC: "CC"
 
+    property string inputTypeText1:
+        "Enter confidence coefficient on the scale: -5(No) .. 0(Dont know) .. 5(Yes)";
+    property string inputTypeText2:
+        "Enter possibility of truth of statement (number between 0 and 1)";
 
     RowLayout {
         anchors.fill: parent
@@ -23,7 +29,6 @@ Item {
 
             TableView {
                 id: itemsTable
-                //model: dummyModel
                 anchors.top: parent.top
                 anchors.fill: parent
                 Layout.fillWidth: true
@@ -54,7 +59,6 @@ Item {
                 anchors.fill: parent
 
                 TableView {
-                    //model: dummyModel
                     id: questionTable
                     anchors.top: parent.top
                     Layout.fillHeight: true
@@ -97,7 +101,31 @@ Item {
 
                     Button {
                         id: inputTypeToggle
-                        text: "CC/P"
+                        text: stateOfInputCC + "\\" + stateOfInputP
+                        state: stateOfInputCC
+                        states: [
+                            State {
+                                name: stateOfInputCC
+                                PropertyChanges {
+                                    target: inputInformationField
+                                    text: inputTypeText1
+                                }
+                            },
+                            State {
+                                name: stateOfInputP
+                                PropertyChanges {
+                                    target: inputInformationField
+                                    text: inputTypeText2
+                                }
+                            }
+                        ]
+                        onClicked: {
+                            if (inputTypeToggle.state == stateOfInputCC) {
+                                inputTypeToggle.state = stateOfInputP
+                            } else {
+                                inputTypeToggle.state = stateOfInputCC
+                            }
+                        }
                     }
                     TextField {
                         id: inputInformationField
@@ -105,6 +133,8 @@ Item {
                         anchors.left: inputTypeToggle.right
                         anchors.leftMargin: 2
                         Layout.fillWidth: true
+                        font.family: "Arial"
+                        font.pointSize: 8
                         anchors.right: inputValueField.left
                         anchors.rightMargin: 2
                     }

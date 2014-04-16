@@ -5,7 +5,7 @@ import QtQuick.Dialogs 1.1
 import QtQuick.Layouts 1.1
 import "modules"
 import "js/scripts.js" as JavaScript
-import DataManager 1.0
+import ExpertSystem 1.0
 
 ApplicationWindow {
     id: appWindow
@@ -39,26 +39,25 @@ ApplicationWindow {
         }
 
         Questions {
+            id: questionTables
             implicitHeight: (parent.height - informationTA.height) / 2
             Layout.fillWidth: true
             anchors.bottom: parent.bottom
         }
     }
 
-    DataManager {
-        id: fileHandler
+    ExpertSystem {
+        id: expertSystem
     }
 
     FileDialog {
         id: fileDialog
         nameFilters: [ "Mini knowledge base (*.mkb)" ]
         onAccepted: {
-            fileHandler.setSource(fileUrl);
+            expertSystem.setSource(fileUrl);
+            updateQuestionModels();
 
-            getItemsModel();
-            itemsNProcessObject.setItemsModel(itemsModel);
-
-            informationTA.text = fileHandler.getDescription();
+            informationTA.text = expertSystem.getDescription();
         }
     }
     Action {
@@ -112,9 +111,15 @@ ApplicationWindow {
         //onTriggered: activeFocusItem.paste()
     }
     Action {
-        id: cancelSelectedAnswers
-        text: "&Cancel Selected Answers"
+        id: cancelLastAnswer
+        text: "&Cancel last answer"
         shortcut: "F9"
+        //onTriggered: aboutDialog.open()
+    }
+    Action {
+        id: stopConsultation
+        text: "&Stop consultation"
+        shortcut: "F8"
         //onTriggered: aboutDialog.open()
     }
 
@@ -122,14 +127,62 @@ ApplicationWindow {
         id: itemsModel
     }
 
+    ListModel {
+        id: activeQuestionsModel
+    }
+
+    ListModel {
+        id: inactiveQuestionsModel
+    }
+
+    function getActiveQuestionsModel() {
+        var i = 0;
+
+        activeQuestionsModel.clear();
+        var count = expertSystem.getActiveQuestionsNumber();
+
+        if (count >= 1) {
+            for (; i < count; i++) {
+                activeQuestionsModel.append({"Question" : expertSystem.getActiveQuestion(i)});
+            }
+        }
+    }
+
+    function getInactiveQuestionsModel() {
+        var i = 0;
+
+        inactiveQuestionsModel.clear();
+        var count = expertSystem.getInactiveQuestionsNumber();
+
+        if (count >= 1) {
+            for (; i < count; i++) {
+                inactiveQuestionsModel.append({"Question" : expertSystem.getInactiveQuestion(i)});
+            }
+        }
+    }
+
     function getItemsModel() {
         var i = 0;
 
         itemsModel.clear();
 
-        for (; i < fileHandler.getItemsNumber(); i++) {
-            itemsModel.append({"Possibility" : fileHandler.getItemPossibility(i),
-                                  "Item" : fileHandler.getItemName(i)});
+        for (; i < expertSystem.getItemsNumber(); i++) {
+            itemsModel.append({"Possibility" : expertSystem.getItemPossibility(i),
+                                  "Item" : expertSystem.getItemName(i)});
         }
+    }
+
+    function updateQuestionModels() {
+        getItemsModel();
+        getActiveQuestionsModel();
+        getInactiveQuestionsModel();
+        itemsNProcessObject.setItemsModel(itemsModel);
+        questionTables.setActiveQuestionsModel(activeQuestionsModel);
+        questionTables.setInactiveQuestionsModel(inactiveQuestionsModel);
+    }
+
+    function fromActiveToInactive(index) {
+        expertSystem.fromActiveToInactive(index);
+        updateQuestionModels();
     }
 }
