@@ -2,7 +2,7 @@
 #define EXPERTSYSTEM_H
 #include "modelstate.h"
 #include "fileio.h"
-//#include "item.h"
+#include <QDateTime>
 #include <QObject>
 
 class ExpertSystem : public QObject
@@ -10,10 +10,9 @@ class ExpertSystem : public QObject
     Q_OBJECT
 public:
     explicit ExpertSystem(QObject *parent = 0);
-    Q_INVOKABLE void fromInactiveToActive(int index);
+    Q_INVOKABLE void fromInactiveToActive(const int &index);
     //Q_INVOKABLE void cancelLastState();
-    //Q_INVOKABLE void setNewState(double statement);
-    Q_INVOKABLE void fromActiveToInactive(int index);
+    Q_INVOKABLE void fromActiveToInactive(const int &index);
     Q_INVOKABLE void beginConsultation();
 
     Q_INVOKABLE QString getActiveQuestion(const int& index);
@@ -24,13 +23,15 @@ public:
     Q_INVOKABLE int getActiveQuestionsNumber() { return pCurrentState->getActiveQuestions().count(); }
     Q_INVOKABLE int getInactiveQuestionsNumber() { return pCurrentState->getInactiveQuestions().count(); }
     Q_INVOKABLE int getItemsNumber() { return pCurrentState->getItems().count(); }
+    Q_INVOKABLE QString getCurrentQuestion() { return pCurrentState->getQuestion(); }
     Q_INVOKABLE void setSource(const QString& source);
 signals:
+    void questionChoosed(const int& number);
 
 private:
     FileIO pFile;
     void start();
-    //const QString& getNewQuestion();
+    const QString& getNewQuestion();
     //void calcItemsPossibilities();
     //const ModelState& getFirstState();
     ModelState* pCurrentState;

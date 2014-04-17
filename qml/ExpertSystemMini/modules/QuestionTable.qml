@@ -13,12 +13,16 @@ Item {
     }
 
     function getFocusItemIndex() {
-        console.log(someTableView.currentRow);
+        return someTableView.currentRow;
     }
+
+    function getTableFocus() {
+        return someTableView.activeFocus;
+    }
+
 
     TableView {
         id: someTableView
-        //model: dummyModel
         anchors.fill: parent
         //sortIndicatorVisible: true
         //onSortIndicatorColumnChanged: model.sort(sortIndicatorColumn, sortIndicatorOrder)

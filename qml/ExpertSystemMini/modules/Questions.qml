@@ -15,6 +15,11 @@ Item {
         inactiveQuestions.setTableModel(model);
     }
 
+    function toggleButtons() {
+        inactiveToActive.enabled = !inactiveToActive.enabled;
+        activeToInactive.enabled = !activeToInactive.enabled;
+    }
+
     RowLayout {
         id: questionsManager
         anchors.fill: parent
@@ -24,28 +29,6 @@ Item {
             anchors.left: parent.left
             anchors.right: questionControlPanel.left
         }
-
-        /*TableView {
-            //model: dummyModel
-            id: activeQuestions
-            anchors.top: parent.top
-            //anchors.fill: parent
-            Layout.fillWidth: true
-            //sortIndicatorVisible: true
-            //onSortIndicatorColumnChanged: model.sort(sortIndicatorColumn, sortIndicatorOrder)
-            //onSortIndicatorOrderChanged: model.sort(sortIndicatorColumn, sortIndicatorOrder)
-
-            TableViewColumn {
-                role: "Significance"
-                title: "Significance"
-                width: activeQuestions.width * 0.25
-            }
-            TableViewColumn {
-                role: "Question"
-                title: "Question"
-                width: activeQuestions.width * 0.70
-            }
-        }*/
 
         GroupBox {
             id: questionControlPanel
@@ -73,29 +56,38 @@ Item {
                     implicitWidth: parent.width
 
                     Button {
+                        id: inactiveToActive
                         anchors.left: parent.left
                         style: ButtonStyle {
                             background: BorderImage {
                                 source: "../images/previous.png"
                             }
                         }
+                        enabled: false
                         implicitWidth: imageWidth
                         implicitHeight: implicitWidth
-                        //onClicked:
+                        onClicked: {
+                            if (inactiveQuestions.getFocusItemIndex() !== -1) {
+                                fromInactiveToActive(inactiveQuestions.getFocusItemIndex());
+                            }
+                        }
                     }
 
                     Button {
+                        id: activeToInactive
                         anchors.right: parent.right
                         style: ButtonStyle {
                             background: BorderImage {
                                 source: "../images/next.png"
                             }
                         }
+                        enabled: false
                         implicitWidth: imageWidth
                         implicitHeight: implicitWidth
-                        onClicked: //fromActiveToInactive(activeQuestions.)
-                        {
-                            activeQuestions.getFocusItemIndex();
+                        onClicked: {
+                            if (activeQuestions.getFocusItemIndex() !== -1) {
+                                fromActiveToInactive(activeQuestions.getFocusItemIndex());
+                            }
                         }
                     }
                 }
@@ -113,7 +105,7 @@ Item {
         id: selectAllQuestions
         text: "&Select all"
         shortcut: StandardKey.SelectAll
-        onTriggered: activeFocusItem.selectAll()
-        enabled: (!!activeFocusItem && !!activeFocusItem["selectAll"])
+        //onTriggered: activeFocusItem.selectAll()
+        //enabled: (!!activeFocusItem && !!activeFocusItem["selectAll"])
     }
 }

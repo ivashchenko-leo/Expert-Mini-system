@@ -15,20 +15,19 @@ void ExpertSystem::start()
 
 void ExpertSystem::beginConsultation()
 {
-
+    QString question = getNewQuestion();
 }
 
-void ExpertSystem::fromActiveToInactive(int index)
+void ExpertSystem::fromActiveToInactive(const int& index)
 {
     pCurrentState->getInactiveQuestions().append(pCurrentState->getActiveQuestions().at(index));
-    qDebug() << pCurrentState->getActiveQuestions().at(index);
     pCurrentState->getActiveQuestions().removeAt(index);
-    qDebug() << pCurrentState->getActiveQuestions().at(index);
 }
 
-void ExpertSystem::fromInactiveToActive(int index)
+void ExpertSystem::fromInactiveToActive(const int& index)
 {
-
+    pCurrentState->getActiveQuestions().append(pCurrentState->getInactiveQuestions().at(index));
+    pCurrentState->getInactiveQuestions().removeAt(index);
 }
 
 QString ExpertSystem::getActiveQuestion(const int& index)
@@ -57,3 +56,20 @@ void ExpertSystem::setSource(const QString& source)
     pFile.setProperties();
     start();
 }
+
+const QString& ExpertSystem::getNewQuestion()
+{
+    QString question;
+    qsrand(QDateTime::currentMSecsSinceEpoch());
+
+    int number = qrand() % (pCurrentState->getActiveQuestions().count());
+
+    question = pCurrentState->getActiveQuestions().at(number);
+    pCurrentState->getActiveQuestions().removeAt(number);
+    pCurrentState->setQuestion(question);
+    emit questionChoosed(number);
+
+    return question;
+}
+
+

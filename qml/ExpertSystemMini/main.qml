@@ -17,7 +17,9 @@ ApplicationWindow {
     minimumWidth: 640
     minimumHeight: 480
 
-    menuBar: CustomMenuBar { }
+    menuBar: CustomMenuBar {
+        id: customMenu
+    }
 
     ColumnLayout {
         id: mainLayout
@@ -32,10 +34,10 @@ ApplicationWindow {
         }
 
         ItemsNProcess {
-                id: itemsNProcessObject
-                implicitHeight: (parent.height - informationTA.height) / 2
-                Layout.fillWidth: true
-                anchors.top: informationTA.bottom
+            id: itemsNProcessObject
+            implicitHeight: (parent.height - informationTA.height) / 2
+            Layout.fillWidth: true
+            anchors.top: informationTA.bottom
         }
 
         Questions {
@@ -48,6 +50,11 @@ ApplicationWindow {
 
     ExpertSystem {
         id: expertSystem
+        onQuestionChoosed: {
+            itemsNProcessObject.setCurrentQuestion(expertSystem.getCurrentQuestion());
+            updateQuestionModels();
+        }
+
     }
 
     FileDialog {
@@ -58,6 +65,8 @@ ApplicationWindow {
             updateQuestionModels();
 
             informationTA.text = expertSystem.getDescription();
+            startConsultation.enabled = !startConsultation.enabled;
+            questionTables.toggleButtons();
         }
     }
     Action {
@@ -75,44 +84,26 @@ ApplicationWindow {
         onTriggered: activeFocusItem.copy()
     }
     Action {
-        id: cutAction
-        text: "&Cut"
-        shortcut: StandardKey.Cut
-        enabled: (!!activeFocusItem && !!activeFocusItem["cut"])
-        onTriggered: activeFocusItem.cut()
-    }
-    Action {
-        id: pasteAction
-        text: "&Paste"
-        shortcut: StandardKey.Paste
-        enabled: (!!activeFocusItem && !!activeFocusItem["paste"])
-        onTriggered: activeFocusItem.paste()
-    }
-    Action {
         id: aboutAction
         text: "&About"
         shortcut: "F1"
         //onTriggered: aboutDialog.open()
     }
     Action {
-        id: changeSettings
-        text: "&Change"
-        //onTriggered: activeFocusItem.copy()
-    }
-    Action {
-        id: resetToDefault
-        text: "&Reset"
-        //onTriggered: activeFocusItem.cut()
-    }
-    Action {
         id: startConsultation
         text: "&Start consultation"
         shortcut: "F8"
-        //onTriggered: activeFocusItem.paste()
+        enabled: false
+        onTriggered: {
+            itemsNProcessObject.enableInput();
+            customMenu.toggleActionInConsultation();
+            expertSystem.beginConsultation();
+        }
     }
     Action {
         id: cancelLastAnswer
         text: "&Cancel last answer"
+        enabled: false
         shortcut: "F9"
         //onTriggered: aboutDialog.open()
     }
@@ -183,6 +174,11 @@ ApplicationWindow {
 
     function fromActiveToInactive(index) {
         expertSystem.fromActiveToInactive(index);
+        updateQuestionModels();
+    }
+
+    function fromInactiveToActive(index) {
+        expertSystem.fromInactiveToActive(index);
         updateQuestionModels();
     }
 }

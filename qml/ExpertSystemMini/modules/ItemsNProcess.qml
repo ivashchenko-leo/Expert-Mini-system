@@ -4,10 +4,16 @@ import QtQuick.Controls 1.1
 import QtQuick.Layouts 1.1
 
 Item {
-    id: itemsNProcess
-
     function setItemsModel(model) {
         itemsTable.model = model;
+    }
+
+    function enableInput(){
+        inputSubmit.enabled = true;
+    }
+
+    function setCurrentQuestion(question) {
+        currentQuestionTA.text = question;
     }
 
     property string stateOfInputP: "P";
@@ -146,9 +152,13 @@ Item {
                     }
                     Button {
                         id: inputSubmit
+                        enabled: false
                         anchors.right: parent.right
                         anchors.rightMargin: 2
                         text: "OK"
+                        onClicked: {
+                            cancelLastAnswer.enabled = !cancelLastAnswer.enabled;
+                        }
                     }
                 }
             }
