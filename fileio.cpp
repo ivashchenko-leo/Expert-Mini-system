@@ -69,7 +69,16 @@ void FileIO::setQuestions(const QString& questions)
 
 void FileIO::setQuestions(const QStringList& questions)
 {
-    pQuestions = questions;
+    int i = 0;
+
+    if (!pQuestions.empty()) {
+        pQuestions.clear();
+    }
+
+    foreach (QString question, questions) {
+        pQuestions.append(new Question(i, question, this));
+        i++;
+    }
 }
 
 void FileIO::setItems(const QString& items)

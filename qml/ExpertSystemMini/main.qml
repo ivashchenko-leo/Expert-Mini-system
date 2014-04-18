@@ -54,7 +54,6 @@ ApplicationWindow {
             itemsNProcessObject.setCurrentQuestion(expertSystem.getCurrentQuestion());
             updateQuestionModels();
         }
-
     }
 
     FileDialog {

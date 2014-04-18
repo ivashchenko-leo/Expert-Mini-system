@@ -146,6 +146,10 @@ Item {
                     }
                     TextField {
                         id: inputValueField
+                        validator: RegExpValidator {
+                            regExp: /-?[0-5](\.\d)?/
+                        }
+
                         anchors.right: inputSubmit.left
                         anchors.rightMargin: 2
                         implicitWidth: questionGB.implicitWidth / 10
@@ -158,6 +162,12 @@ Item {
                         text: "OK"
                         onClicked: {
                             cancelLastAnswer.enabled = !cancelLastAnswer.enabled;
+
+                            var value = inputValueField.text;
+                            if (inputTypeToggle.state == stateOfInputCC) {
+                                value = (parseFloat(value) + 5) / 10;
+                            }
+                            expertSystem.setConfidence(value);
                         }
                     }
                 }

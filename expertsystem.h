@@ -23,15 +23,17 @@ public:
     Q_INVOKABLE int getActiveQuestionsNumber() { return pCurrentState->getActiveQuestions().count(); }
     Q_INVOKABLE int getInactiveQuestionsNumber() { return pCurrentState->getInactiveQuestions().count(); }
     Q_INVOKABLE int getItemsNumber() { return pCurrentState->getItems().count(); }
-    Q_INVOKABLE QString getCurrentQuestion() { return pCurrentState->getQuestion(); }
+    Q_INVOKABLE QString getCurrentQuestion() { return pCurrentState->getQuestion()->getString(); }
     Q_INVOKABLE void setSource(const QString& source);
+    Q_INVOKABLE void setConfidence(QString confidence);
+    void calcNewPossibilities();
 signals:
     void questionChoosed(const int& number);
 
 private:
     FileIO pFile;
     void start();
-    const QString& getNewQuestion();
+    const Question *getNewQuestion();
     //void calcItemsPossibilities();
     //const ModelState& getFirstState();
     ModelState* pCurrentState;

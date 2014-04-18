@@ -15,7 +15,7 @@ void ExpertSystem::start()
 
 void ExpertSystem::beginConsultation()
 {
-    QString question = getNewQuestion();
+    getNewQuestion();
 }
 
 void ExpertSystem::fromActiveToInactive(const int& index)
@@ -32,12 +32,12 @@ void ExpertSystem::fromInactiveToActive(const int& index)
 
 QString ExpertSystem::getActiveQuestion(const int& index)
 {
-    return pCurrentState->getActiveQuestions().at(index);
+    return pCurrentState->getActiveQuestions().at(index)->getString();
 }
 
 QString ExpertSystem::getInactiveQuestion(const int& index)
 {
-    return pCurrentState->getInactiveQuestions().at(index);
+    return pCurrentState->getInactiveQuestions().at(index)->getString();
 }
 
 QString ExpertSystem::getItemName(const int& index)
@@ -57,19 +57,27 @@ void ExpertSystem::setSource(const QString& source)
     start();
 }
 
-const QString& ExpertSystem::getNewQuestion()
+void ExpertSystem::setConfidence(QString confidence)
 {
-    QString question;
+    pCurrentState->setConfidence(confidence.toDouble());
+}
+
+void ExpertSystem::calcNewPossibilities()
+{
+
+}
+
+const Question* ExpertSystem::getNewQuestion()
+{
     qsrand(QDateTime::currentMSecsSinceEpoch());
 
     int number = qrand() % (pCurrentState->getActiveQuestions().count());
 
-    question = pCurrentState->getActiveQuestions().at(number);
+    pCurrentState->setQuestion(pCurrentState->getActiveQuestions().at(number));
     pCurrentState->getActiveQuestions().removeAt(number);
-    pCurrentState->setQuestion(question);
     emit questionChoosed(number);
 
-    return question;
+    return pCurrentState->getQuestion();
 }
 
 

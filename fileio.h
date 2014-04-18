@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QRegExp>
 #include "item.h"
+#include "question.h"
 
 class FileIO : public QObject
 {
@@ -19,9 +20,9 @@ public:
     Q_PROPERTY(QString description
                READ getDescription
                WRITE setDescription)
-    Q_PROPERTY(QStringList questions
+    /*Q_PROPERTY(QStringList questions
                READ getQuestions
-               WRITE setQuestions)
+               WRITE setQuestions)*/
 
     explicit FileIO(QObject *parent = 0);
 
@@ -31,7 +32,7 @@ public:
 
     QString source() { return mSource; }
     QString getDescription() { return pDescription; }
-    QStringList getQuestions() { return pQuestions; }
+    QList<Question* > getQuestions() { return pQuestions; }
     QList<Item* > getItems() { return pItems; }
     int getQuestionsNumber() { return pQuestions.count(); }
     int getItemsNumber() { return pItems.count(); }
@@ -56,7 +57,7 @@ private:
     bool write(const QString& data);
 
     QList<Item* > pItems;
-    QStringList pQuestions;
+    QList<Question* > pQuestions;
     QString mSource;
     QString pDescription;
 };

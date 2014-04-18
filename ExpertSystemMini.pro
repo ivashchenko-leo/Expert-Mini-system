@@ -11,7 +11,8 @@ SOURCES += main.cpp \
     fileio.cpp \
     item.cpp \
     expertsystem.cpp \
-    modelstate.cpp
+    modelstate.cpp \
+    question.cpp
 
 # Installation path
 # target.path =
@@ -33,4 +34,5 @@ HEADERS += \
     fileio.h \
     item.h \
     expertsystem.h \
-    modelstate.h
+    modelstate.h \
+    question.h
