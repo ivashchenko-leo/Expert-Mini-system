@@ -3,6 +3,7 @@
 #include "modelstate.h"
 #include "fileio.h"
 #include <QDateTime>
+#include <QStack>
 #include <QObject>
 
 class ExpertSystem : public QObject
@@ -11,7 +12,7 @@ class ExpertSystem : public QObject
 public:
     explicit ExpertSystem(QObject *parent = 0);
     Q_INVOKABLE void fromInactiveToActive(const int &index);
-    //Q_INVOKABLE void cancelLastState();
+    Q_INVOKABLE void cancelLastState();
     Q_INVOKABLE void fromActiveToInactive(const int &index);
     Q_INVOKABLE void beginConsultation();
 
@@ -26,18 +27,22 @@ public:
     Q_INVOKABLE QString getCurrentQuestion() { return pCurrentState->getQuestion()->getString(); }
     Q_INVOKABLE void setSource(const QString& source);
     Q_INVOKABLE void setConfidence(QString confidence);
-    void calcNewPossibilities();
+    Q_INVOKABLE void calcNewPossibilities();
+    Q_INVOKABLE void stopConsultation();
 signals:
     void questionChoosed(const int& number);
+    void endConsultation();
 
 private:
     FileIO pFile;
     void start();
+    void createNewState();
+    void checkIfItsEnd();
     const Question *getNewQuestion();
-    //void calcItemsPossibilities();
-    //const ModelState& getFirstState();
+    void saveLastPossibilities();
+    QStack<QVector<double> > pItemsPos;
     ModelState* pCurrentState;
-    //QStack<ModelState* > stackOfStates;
+    QStack<ModelState* > stackOfStates;
 };
 
 #endif // EXPERTSYSTEM_H

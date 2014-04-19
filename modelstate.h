@@ -2,6 +2,7 @@
 #define MODELSTATE_H
 #include "item.h"
 #include "question.h"
+#include <QDebug>
 #include <QObject>
 
 class ModelState : public QObject
@@ -21,6 +22,8 @@ public:
     void setItems(const QList<Item* >& items) { pItems = items; }
     void setActiveQuestions(const QList<Question* >& questions) { pActiveQuestions = questions; }
     void setInactiveQuestions(const QList<Question* >& questions) { pInactiveQuestions = questions; }
+    void mergeItemsPos(const QVector<double>& pos);
+    bool itemWithOnePExist();
 signals:
 
 private:

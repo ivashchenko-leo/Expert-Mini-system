@@ -1,28 +1,45 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.1
-//import QtQuick.Controls.Styles 1.1
 import QtQuick.Layouts 1.1
-
+import QtQuick.Controls.Styles 1.1
 Item {
     function setItemsModel(model) {
         itemsTable.model = model;
     }
 
-    function enableInput(){
-        inputSubmit.enabled = true;
+    function enableInput(flag) {
+        inputSubmit.enabled = flag;
     }
 
     function setCurrentQuestion(question) {
         currentQuestionTA.text = question;
     }
 
+    function deleteJournalLastRow() {
+        journalCounter--;
+        journalTable.remove(journalCounter);
+        if (journalCounter == 0) {
+            cancelLastAnswer.enabled = false;
+        }
+    }
+
+    function clearJournalTable() {
+        journalTable.clear();
+        journalCounter = 0;
+    }
+
+    property int journalCounter: 0;
     property string stateOfInputP: "P";
-    property string stateOfInputCC: "CC"
+    property string stateOfInputCC: "CC";
 
     property string inputTypeText1:
         "Enter confidence coefficient on the scale: -5(No) .. 0(Dont know) .. 5(Yes)";
     property string inputTypeText2:
         "Enter possibility of truth of statement (number between 0 and 1)";
+
+    ListModel {
+        id: journalTable
+    }
 
     RowLayout {
         anchors.fill: parent
@@ -45,12 +62,12 @@ Item {
                 TableViewColumn {
                     role: "Possibility"
                     title: "Possibility"
-                    width: itemsGB.width * 0.20
+                    width: itemsGB.width * 0.30
                 }
                 TableViewColumn {
                     role: "Item"
                     title: "Item"
-                    width: itemsGB.width * 0.70
+                    width: itemsGB.width * 0.65
                 }
             }
         }
@@ -69,6 +86,7 @@ Item {
                     anchors.top: parent.top
                     Layout.fillHeight: true
                     implicitWidth: parent.width
+                    model: journalTable
                     //sortIndicatorVisible: true
                     //onSortIndicatorColumnChanged: model.sort(sortIndicatorColumn, sortIndicatorOrder)
                     //onSortIndicatorOrderChanged: model.sort(sortIndicatorColumn, sortIndicatorOrder)
@@ -93,6 +111,10 @@ Item {
                 TextArea {
                     id: currentQuestionTA
                     readOnly: true
+                    style: TextAreaStyle {
+                        textColor: "blue"
+                    }
+
                     implicitWidth: parent.width
                     implicitHeight: parent.height / 5
                     anchors.top: questionTable.bottom
@@ -116,12 +138,20 @@ Item {
                                     target: inputInformationField
                                     text: inputTypeText1
                                 }
+                                PropertyChanges {
+                                    target: regexValidator
+                                    regExp: /-?[0-5](\.\d)?/
+                                }
                             },
                             State {
                                 name: stateOfInputP
                                 PropertyChanges {
                                     target: inputInformationField
                                     text: inputTypeText2
+                                }
+                                PropertyChanges {
+                                    target: regexValidator
+                                    regExp: /0\.\d/
                                 }
                             }
                         ]
@@ -147,7 +177,7 @@ Item {
                     TextField {
                         id: inputValueField
                         validator: RegExpValidator {
-                            regExp: /-?[0-5](\.\d)?/
+                            id: regexValidator
                         }
 
                         anchors.right: inputSubmit.left
@@ -161,13 +191,20 @@ Item {
                         anchors.rightMargin: 2
                         text: "OK"
                         onClicked: {
-                            cancelLastAnswer.enabled = !cancelLastAnswer.enabled;
+                            cancelLastAnswer.enabled = true;
 
                             var value = inputValueField.text;
                             if (inputTypeToggle.state == stateOfInputCC) {
                                 value = (parseFloat(value) + 5) / 10;
                             }
                             expertSystem.setConfidence(value);
+
+                            journalTable.append({"Number" : journalCounter, "Confidence" : value,
+                                                    "Question" : currentQuestionTA.text});
+                            journalCounter++;
+
+                            inputValueField.text = "";
+                            expertSystem.calcNewPossibilities();
                         }
                     }
                 }

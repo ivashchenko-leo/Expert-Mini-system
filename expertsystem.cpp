@@ -64,7 +64,89 @@ void ExpertSystem::setConfidence(QString confidence)
 
 void ExpertSystem::calcNewPossibilities()
 {
+    double Py, P, Pn, possibility;
+    int i = 0;
 
+    saveLastPossibilities();
+
+    foreach (Item* item, pCurrentState->getItems()) {
+        Py = item->getAnswersPossibility().at(pCurrentState->getQuestion()->getNumber());
+        P = item->getPossibility();
+        Pn = item->getNotAnswersPossibility().at(pCurrentState->getQuestion()->getNumber());
+
+        if (pCurrentState->getConfidence() >= 0.5) {
+            if (pCurrentState->getConfidence() == 0.5) {
+                possibility = P;
+                break;
+            }
+            possibility = Py * P / (Py * P + Pn * (1.0 - P));
+        } else {
+            possibility = 1.0 - ((1.0 - Py) * P / ((1.0 - Py) * P + (1.0 - Pn) * (1.0 - P)));
+        }
+
+        if (possibility <= 0.0) {
+           possibility = 0.0;
+        }
+        if (possibility >= 1.0) {
+           possibility = 1.0;
+        }
+        //possibility = possibility * pCurrentState->getConfidence();
+        pCurrentState->getItems().at(i)->setPossibility(possibility);
+        i++;
+    }
+
+    createNewState();
+    checkIfItsEnd();
+}
+
+void ExpertSystem::saveLastPossibilities()
+{
+    QVector<double> pos;
+
+    foreach (Item* item, pCurrentState->getItems()) {
+        pos.append(item->getPossibility());
+    }
+
+    pItemsPos.push(pos);
+}
+
+void ExpertSystem::cancelLastState()
+{
+    if (stackOfStates.count() <= 1) {
+        stopConsultation();
+        getNewQuestion();
+    } else {
+        pCurrentState = stackOfStates.pop();
+        pCurrentState->mergeItemsPos(pItemsPos.pop());
+    }
+}
+
+void ExpertSystem::checkIfItsEnd()
+{
+    if (pCurrentState->getActiveQuestions().size() == 0 || pCurrentState->itemWithOnePExist()) {
+        emit endConsultation();
+    } else {
+        getNewQuestion();
+    }
+}
+
+void ExpertSystem::stopConsultation()
+{
+    stackOfStates.clear();
+    delete pCurrentState;
+    pCurrentState = new ModelState(this);
+    setSource(pFile.source());
+}
+
+void ExpertSystem::createNewState()
+{
+    stackOfStates.push(pCurrentState);
+    ModelState* newState = new ModelState(this);
+    newState->setItems(pCurrentState->getItems());
+    newState->setNumber(pCurrentState->getNumber() + 1);
+    newState->setActiveQuestions(pCurrentState->getActiveQuestions());
+    newState->setInactiveQuestions(pCurrentState->getInactiveQuestions());
+    pCurrentState = newState;
 }
 
 const Question* ExpertSystem::getNewQuestion()

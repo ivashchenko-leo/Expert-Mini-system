@@ -11,7 +11,7 @@ public:
     explicit Item(QObject *parent = 0);
     Item(QString item, const QString& separator = ",", QObject *parent = 0);
     void setName(const QString& name) { pName = name; }
-    void setPossibility(const int& possibility) { pPossibility = possibility; }
+    void setPossibility(const double& possibility) { pPossibility = possibility; }
     void setAnswersPossibility(const QVector<double> &answers);
     void setNotAnswersPossibility(const QVector<double> answers);
 

@@ -7,14 +7,15 @@ MenuBar {
             id: customMenuBar
 
             function toggleActionInConsultation(){
-                if (!consultationButton.checked) {
+                if (consultationFlag) {
                     consultationButton.action = stopConsultation;
-                    consultationButton.checked = true;
+                    consultationFlag = false;
                 } else {
                     consultationButton.action = startConsultation;
-                    consultationButton.checked = false;
+                    consultationFlag = true;
                 }
             }
+            property bool consultationFlag: true
 
             Menu {
                 title: "&File"
@@ -32,13 +33,11 @@ MenuBar {
                 MenuItem {
                     id: consultationButton
                     enabled: false
-                    checked: false
                     action: startConsultation
                 }
                 MenuItem {
                     id: cancelButton
                     action: cancelLastAnswer
-                    enabled: false
                 }
             }
             Menu {

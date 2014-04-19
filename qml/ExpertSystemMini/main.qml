@@ -54,6 +54,11 @@ ApplicationWindow {
             itemsNProcessObject.setCurrentQuestion(expertSystem.getCurrentQuestion());
             updateQuestionModels();
         }
+        onEndConsultation: {
+            itemsNProcessObject.setCurrentQuestion("End of consultation");
+            itemsNProcessObject.enableInput(false);
+            updateQuestionModels();
+        }
     }
 
     FileDialog {
@@ -94,7 +99,7 @@ ApplicationWindow {
         shortcut: "F8"
         enabled: false
         onTriggered: {
-            itemsNProcessObject.enableInput();
+            itemsNProcessObject.enableInput(true);
             customMenu.toggleActionInConsultation();
             expertSystem.beginConsultation();
         }
@@ -104,13 +109,30 @@ ApplicationWindow {
         text: "&Cancel last answer"
         enabled: false
         shortcut: "F9"
-        //onTriggered: aboutDialog.open()
+        onTriggered: {
+            expertSystem.cancelLastState();
+
+            itemsNProcessObject.deleteJournalLastRow();
+            itemsNProcessObject.setCurrentQuestion(expertSystem.getCurrentQuestion());
+
+            updateQuestionModels();
+        }
     }
     Action {
         id: stopConsultation
         text: "&Stop consultation"
         shortcut: "F8"
-        //onTriggered: aboutDialog.open()
+        onTriggered: {
+            expertSystem.stopConsultation();
+
+            itemsNProcessObject.clearJournalTable();
+            itemsNProcessObject.setCurrentQuestion("");
+
+            customMenu.toggleActionInConsultation();
+            cancelLastAnswer.enabled = false;
+
+            updateQuestionModels();
+        }
     }
 
     ListModel {
