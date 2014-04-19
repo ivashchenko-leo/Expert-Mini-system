@@ -2,8 +2,6 @@
 #define MODELSTATE_H
 #include "item.h"
 #include "question.h"
-#include <QDebug>
-#include <QObject>
 
 class ModelState : public QObject
 {

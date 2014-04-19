@@ -26,7 +26,7 @@ OTHER_FILES += \
     qml/ExpertSystemMini/modules/ItemsNProcess.qml \
     qml/ExpertSystemMini/modules/Questions.qml \
     qml/ExpertSystemMini/modules/QuestionTable.qml \
-    qml/ExpertSystemMini/js/scripts.js
+    qml/ExpertSystemMini/modules/AboutDialog.qml
 
 RESOURCES +=
 

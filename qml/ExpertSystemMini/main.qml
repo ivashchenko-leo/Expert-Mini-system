@@ -4,7 +4,6 @@ import QtQuick.Controls 1.1
 import QtQuick.Dialogs 1.1
 import QtQuick.Layouts 1.1
 import "modules"
-import "js/scripts.js" as JavaScript
 import ExpertSystem 1.0
 
 ApplicationWindow {
@@ -19,6 +18,10 @@ ApplicationWindow {
 
     menuBar: CustomMenuBar {
         id: customMenu
+    }
+
+    AboutDialog {
+        id: aboutDialog
     }
 
     ColumnLayout {
@@ -91,7 +94,7 @@ ApplicationWindow {
         id: aboutAction
         text: "&About"
         shortcut: "F1"
-        //onTriggered: aboutDialog.open()
+        onTriggered: aboutDialog.open()
     }
     Action {
         id: startConsultation

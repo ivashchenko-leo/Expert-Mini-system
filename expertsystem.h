@@ -4,7 +4,6 @@
 #include "fileio.h"
 #include <QDateTime>
 #include <QStack>
-#include <QObject>
 
 class ExpertSystem : public QObject
 {

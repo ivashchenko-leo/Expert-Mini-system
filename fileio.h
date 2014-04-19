@@ -2,7 +2,6 @@
 #define FILEIO_H
 #include <QFile>
 #include <QTextStream>
-#include <QObject>
 #include <QDebug>
 #include <QRegExp>
 #include "item.h"
@@ -20,9 +19,6 @@ public:
     Q_PROPERTY(QString description
                READ getDescription
                WRITE setDescription)
-    /*Q_PROPERTY(QStringList questions
-               READ getQuestions
-               WRITE setQuestions)*/
 
     explicit FileIO(QObject *parent = 0);
 
